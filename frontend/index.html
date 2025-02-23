@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Alert System</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="fade-in">Early Warning System</h1>
+        
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="Enter city name">
+            <button onclick="getWeather()">Get Weather</button>
+        </div>
+
+        <div class="weather-card fade-in">
+            <h2 id="cityName"></h2>
+            <p id="weatherCondition"></p>
+            <p id="temperature"></p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-400 to-blue-600 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-3xl font-bold text-center mb-6 text-blue-800">Weather App</h1>
+        <form id="weather-form" class="mb-6">
+            <div class="flex">
+                <input type="text" id="city-input" placeholder="Enter city name" class="flex-grow px-4 py-2 rounded-l-lg border-2 border-blue-300 focus:outline-none focus:border-blue-500">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition duration-300">Search</button>
+            </div>
+        </form>
+        <div id="weather-info" class="hidden">
+            <div class="text-center">
+                <h2 id="city-name" class="text-2xl font-semibold mb-2"></h2>
+                <p id="temperature" class="text-4xl font-bold mb-2"></p>
+                <p id="description" class="text-lg mb-4"></p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <p class="text-sm text-blue-800">Humidity</p>
+                    <p id="humidity" class="text-xl font-semibold"></p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <p class="text-sm text-blue-800">Wind Speed</p>
+                    <p id="wind-speed" class="text-xl font-semibold"></p>
+                </div>
+            </div>
+        </div>
+        <div id="error-message" class="hidden text-red-500 text-center mt-4"></div>
+    </div>
+
+    <script>
+        document.getElementById('weather-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const city = document.getElementById('city-input').value;
+            const weatherInfo = document.getElementById('weather-info');
+            const errorMessage = document.getElementById('error-message');
+
+            try {
+                const response = await fetch(`http://localhost:5001/weather?city=${encodeURIComponent(city)}`);
+                if (!response.ok) {
+                    throw new Error('City not found');
+                }
+                const data = await response.json();
+
+                document.getElementById('city-name').textContent = data.name;
+                document.getElementById('temperature').textContent = `${data.main.temp}°C`;
+                document.getElementById('description').textContent = data.weather[0].description;
+                document.getElementById('humidity').textContent = `${data.main.humidity}%`;
+                document.getElementById('wind-speed').textContent = `${data.wind.speed} m/s`;
+
+                weatherInfo.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+            } catch (error) {
+                weatherInfo.classList.add('hidden');
+                errorMessage.textContent = error.message;
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
+ -->

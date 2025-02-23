@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Alert!!!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-400 to-blue-600 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-3xl font-bold text-center mb-6 text-blue-800">Weather Alert!!!</h1>
+        <form id="weather-form" class="mb-6">
+            <div class="flex">
+                <input type="text" id="city-input" placeholder="Enter city name" class="flex-grow px-4 py-2 rounded-l-lg border-2 border-blue-300 focus:outline-none focus:border-blue-500">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition duration-300">Search</button>
+            </div>
+        </form>
+        <div id="weather-info" class="hidden">
+            <div class="text-center mb-4">
+                <h2 id="city-name" class="text-2xl font-semibold mb-2"></h2>
+                <div class="flex justify-center items-center">
+                    <img id="weather-icon" src="/placeholder.svg" alt="Weather icon" class="w-16 h-16 mr-2">
+                    <p id="temperature" class="text-4xl font-bold"></p>
+                </div>
+                <p id="description" class="text-lg mb-2"></p>
+                <p id="feels-like" class="text-md"></p>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <p class="text-sm text-blue-800">Humidity</p>
+                    <p id="humidity" class="text-xl font-semibold"></p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <p class="text-sm text-blue-800">Wind Speed</p>
+                    <p id="wind-speed" class="text-xl font-semibold"></p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <p class="text-sm text-blue-800">Pressure</p>
+                    <p id="pressure" class="text-xl font-semibold"></p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <p class="text-sm text-blue-800">Visibility</p>
+                    <p id="visibility" class="text-xl font-semibold"></p>
+                </div>
+            </div>
+            <div id="alert" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 hidden"></div>
+        </div>
+        <div id="error-message" class="hidden text-red-500 text-center mt-4"></div>
+    </div>
+
+    <script>
+        document.getElementById('weather-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const city = document.getElementById('city-input').value;
+            const weatherInfo = document.getElementById('weather-info');
+            const errorMessage = document.getElementById('error-message');
+            const alertBox = document.getElementById('alert');
+
+            try {
+                const response = await fetch(`http://localhost:5001/weather?city=${encodeURIComponent(city)}`);
+                if (!response.ok) {
+                    throw new Error('City not found');
+                }
+                const data = await response.json();
+                const weather = data.weather;
+
+                document.getElementById('city-name').textContent = `${weather.name}, ${weather.sys.country}`;
+                document.getElementById('temperature').textContent = `${weather.main.temp.toFixed(1)}°C`;
+                document.getElementById('description').textContent = weather.weather[0].description;
+                document.getElementById('feels-like').textContent = `Feels like ${weather.main.feels_like.toFixed(1)}°C`;
+                document.getElementById('humidity').textContent = `${weather.main.humidity}%`;
+                document.getElementById('wind-speed').textContent = `${weather.wind.speed.toFixed(1)} m/s`;
+                document.getElementById('pressure').textContent = `${weather.main.pressure} hPa`;
+                document.getElementById('visibility').textContent = `${(weather.visibility / 1000).toFixed(1)} km`;
+                
+                const iconCode = weather.weather[0].icon;
+                const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+                document.getElementById('weather-icon').src = iconUrl;
+
+                if (data.alert !== "No severe weather detected.") {
+                    alertBox.textContent = data.alert;
+                    alertBox.classList.remove('hidden');
+                } else {
+                    alertBox.classList.add('hidden');
+                }
+
+                weatherInfo.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+            } catch (error) {
+                weatherInfo.classList.add('hidden');
+                errorMessage.textContent = error.message;
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+ 
